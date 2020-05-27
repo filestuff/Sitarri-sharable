@@ -1,0 +1,23 @@
+{% load integrations %}
+
+{% get_integrations as api_integrations %}
+
+{% for integration in api_integrations %}
+
+{% if integration.id == "openid" %}
+
+{% for brand in integration.get_brands %}
+<li>
+  <a title="{{brand.name}}" 
+     class="socialaccount_provider {{integration.id}} {{brand.id}}" 
+     href="{% provider_login_url integration.id process=process scope=scope auth_params=auth_params %}"
+     >{{brand.name}}</a>
+</li>
+{% endfor %}
+{% endif %}
+<li>
+  <a title="{{integration.name}}" class="socialaccount_provider {{integration.id}}"
+  href="{% provider_login_url integration.id process=process scope=scope auth_params=auth_params %}"
+  >{{integration.name}}</a>
+</li>
+{% endfor %}

@@ -1,0 +1,44 @@
+{% load integrations %}
+{% load socialaccount %}
+
+
+{% block stylesheets %}
+<link href="/static/css-dropbox/components/button-vfloOTIBW.css" type="text/css" crossorigin="anonymous" rel="stylesheet">
+<link href="/static/css-dropbox/dropbox/base-vflE2SnLq.css" type="text/css" crossorigin="anonymous" rel="stylesheet">
+
+{% endblock stylesheets %}
+
+
+{% get_social_providers as socialaccount_providers %}
+{% for provider in socialaccount_providers %}
+
+{% if provider.id == "openid" %}
+{% for brand in provider.get_brands %}
+<li>
+  <a title="{{brand.name}}" 
+     class="socialaccount_provider {{provider.id}} {{brand.id}}" 
+     href="{% provider_login_url provider.id openid=brand.openid_url process=process %}"
+     >{{brand.name}}</a>
+</li>
+{% endfor %}
+{% endif %}
+
+{% if provider.name == "Google" %}
+	<div class="login-form-container__google-div">
+	    <a class="auth-google button-primary" href="{% provider_login_url provider.id process=process scope=scope auth_params=auth_params %}" title="{{provider.name}}">
+    <div class="auth-button-text">Sign in with Google</div></a></div>
+{% endif %}
+
+
+{% if provider.name == "Facebook" %}
+	<div class="login-form-container__facebook-div">
+	    <a class="auth-facebook button-primary" href="{% provider_login_url provider.id process=process scope=scope auth_params=auth_params %}" title="{{provider.name}}">
+    <div class="auth-button-text">Sign in with Facebook</div></a></div>
+{% endif %}
+
+
+<!-- <li>
+  <a title="{{provider.name}}" class="socialaccount_provider {{provider.id}}" 
+     href="{% provider_login_url provider.id process=process scope=scope auth_params=auth_params %}">{{provider.name}}</a>
+</li> -->
+{% endfor %}

@@ -1,0 +1,92 @@
+{% extends "dashboard/layouts/base-auth.html" %}
+
+{% load account socialaccount %}
+
+{% block title %} Login {% endblock title %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+{% get_providers as socialaccount_providers %}
+
+<div id="outer-frame">
+    <div id="page-content">
+        <div tabindex="-1" id="main-skip" class="main-skip-destination"></div>
+        <div id="login-or-register-page-content"><img data-js-component-id="component4145244323231446719" src="https://cfl.dropboxstatic.com/static/images/empty_states/sign-in-boulder@2x-vfl87XcA-.png" data-hi-res="https://cfl.dropboxstatic.com/static/images/empty_states/sign-in-boulder@2x-vfl87XcA-.png" alt="" class="login-or-register-img" style="width: 350px; height: 377px;">
+            <div class="login-register-container-wrapper">
+                <div class="login-register-container standard login-register-container--link-top" id="pyxl4145244323231446720">
+
+                    <div class="login-register-register-part" style="display: block;">
+                        <div class="clearfix">
+                          {% if msg %}
+                                <span class="text-danger">{{ msg | safe }}</span>
+                            {% else %}
+                            <div class="login-register-header">Create an account</div>
+                            <div class="login-register-switch">or <a href="{{ login_url }}" class="login-register-switch-link">log in</a></div>
+                            {% endif %}
+                        </div>
+
+                        <div id="component4145244323231446724" class="form_shown register third_party_auth">
+                            <div class="form_shown login-form-container register standard">
+
+                              <form class="clearfix credentials-form login-form" method="post" id="signup_form" action="{% url 'account_signup' %}">
+                                          {% csrf_token %}
+
+                                              <div class="register-form__name-fields">
+                                                  <div class="text-input standard input-fname first text-input__margin-right">
+                                                      <div class="text-input-error-wrapper"></div>
+                                                      <div class="text-input-wrapper">
+                                                        {{ form.username }}
+                                                        <span class="text-danger">{{ form.username.errors }}</span>
+                                                      </div>
+                                                  </div>
+                                                  <div class="register-form__credential-fields">
+                                                    <div class="text-input standard input-email text-input__margin-right">
+                                                        <div class="text-input-error-wrapper"></div>
+                                                        <div class="text-input-wrapper">
+                                                          {{ form.email }}
+                                                          <span class="text-danger">{{ form.email.errors }}</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="text-input standard input-password">
+                                                        <div class="text-input-error-wrapper"></div>
+                                                        <div class="text-input-wrapper">
+                                                            {{ form.password1 }}
+                                                            <span class="text-danger">{{ form.password1.errors }}</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="text-input standard input-password">
+                                                        <div class="text-input-error-wrapper"></div>
+                                                        <div class="text-input-wrapper">
+                                                            {{ form.password2 }}
+                                                            <span class="text-danger">{{ form.password2.errors }}</span>
+                                                        </div>
+                                                    </div>
+                                            </div>
+                                      </div>
+                                    <div class="checkbox standard agree checkbox-inline">
+                                        <div class="text-input-error-wrapper"></div><input type="checkbox" id="tos_agree03989591966337436" name="tos_agree" aria-checked="false"><label for="tos_agree03989591966337436" class="checkbox_label"><span>I agree to <a href="/terms">Sitarri terms</a>.</span></label>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary"><span class="sign-up-text">Create an account</span></button>
+                                    <div class="hr-label"><span class="hr-label__text">or</span></div>
+                                    
+                          {% if socialaccount_providers  %}
+                        {% include "allauth/account/provider_panel.html" with process="login" %}
+                          {% endif %}
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+{% endblock %}

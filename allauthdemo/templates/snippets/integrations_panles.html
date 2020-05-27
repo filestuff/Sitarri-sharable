@@ -1,0 +1,346 @@
+{% load integrations %}
+{% load i18n %}
+
+{% get_integrations as api_integrations %}
+{% get_user_integrations user as current_integrations %}
+
+
+{% block content %}
+
+
+    {% for base_account in form.accounts %}
+    {% with base_account.get_provider_account as account %}
+    {% if account.get_brand.name not in 'Google, Facebook' %}
+    <div class="col-md-4">
+        <form method="post" id='integrations-form'>
+            {% csrf_token %}
+        <div class="card" style="background-color:#effbf0;">
+            <div class="card-header">
+                <div class="d-flex align-items-center">
+                    <h4 class="card-title">{{account}}</h4>
+                    <span class="badge badge-success">Integrated</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-5 col-md-4">
+                        <div class="avatar avatar-xl">
+                            {% get_brand_logo account as url %}
+                            <img src={{url}} alt="..." class="avatar-img rounded">
+                        </div>
+                    </div>
+                    <div class="col-7 col-md-8">
+                        <div class="tab-content" id="v-pills-with-icon-tabContent">
+                            <div class="tab-pane fade show active" id="v-pills-home-icons" role="tabpanel" aria-labelledby="v-pills-home-tab-icons">
+                                <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <ul class="nav nav-pills nav-secondary" id="pills-tab" role="tablist">
+                    <li class="nav-item">
+                        <input id="id_account_{{base_account.id}}" type="hidden" name="account" value="{{base_account.id}}" />
+                        <button class="btn btn-danger" id="kjsdhfsk">{% trans 'Remove' %}</button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        </form>
+    </div>
+    {% endif %}
+    {% endwith %}
+    {% endfor %}
+
+{% for integration in api_integrations %}
+{% if integration.id not in current_integrations %}
+{% if integration.name == 'Shopify' %}
+<div class="col-md-4">
+    <div class="card">
+        <div class="card-header">
+            <div class="d-flex align-items-center">
+                <h4 class="card-title">{{integration.name}}</h4>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-5 col-md-4">
+                    <div class="nav flex-column nav-pills nav-secondary nav-pills-no-bd nav-pills-icons" id="v-pills-tab-with-icon" role="tablist" aria-orientation="vertical">
+                       <div class="avatar avatar-xl">
+                            {% get_brand_logo integration.name as url %}
+                            <img src={{url}} alt="..." class="avatar-img rounded">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-7 col-md-8">
+                    <div class="tab-content" id="v-pills-with-icon-tabContent">
+                        <div class="tab-pane fade show active" id="v-pills-home-icons" role="tabpanel" aria-labelledby="v-pills-home-tab-icons">
+                            <p>Shopify panels, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <ul class="nav nav-pills nav-secondary" id="pills-tab" role="tablist">
+                <li class="nav-item">
+                    <button type="button" class="btn btn-primary" id="alert_demo_5">Connect</button>
+                </li>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+{% else %}
+<div class="col-md-4">
+    <div class="card">
+        <div class="card-header">
+            <div class="d-flex align-items-center">
+                <h4 class="card-title">{{integration.name}}</h4>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-5 col-md-4">
+                    <div class="nav flex-column nav-pills nav-secondary nav-pills-no-bd nav-pills-icons" id="v-pills-tab-with-icon" role="tablist" aria-orientation="vertical">
+                       <div class="avatar avatar-xl">
+                            {% get_brand_logo integration.name as url %}
+                            <img src={{url}} alt="..." class="avatar-img rounded">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-7 col-md-8">
+                    <div class="tab-content" id="v-pills-with-icon-tabContent">
+                        <div class="tab-pane fade show active" id="v-pills-home-icons" role="tabpanel" aria-labelledby="v-pills-home-tab-icons">
+                            <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <ul class="nav nav-pills nav-secondary" id="pills-tab" role="tablist">
+                <li class="nav-item">
+                    <a class="btn btn-primary" id="pills-home-tab" title="{{integration.name}}" href="{% provider_login_url integration.id process=process scope=scope auth_params=auth_params %}">connect</a>
+                </li>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endif %}
+
+{% endfor %}
+
+{% endblock %}
+
+
+{% block javascripts %}
+
+<script>
+
+        //== Class definition
+        var SweetAlert2Demo = function() {
+
+            //== Demos
+            var initDemos = function() {
+                //== Sweetalert Demo 1
+                $('#alert_demo_1').click(function(e) {
+                    swal('Good job!', {
+                        buttons: {                  
+                            confirm: {
+                                className : 'btn btn-success'
+                            }
+                        },
+                    });
+                });
+
+                //== Sweetalert Demo 2
+                $('#alert_demo_2').click(function(e) {
+                    swal("Here's the title!", "...and here's the text!", {
+                        buttons: {                  
+                            confirm: {
+                                className : 'btn btn-success'
+                            }
+                        },
+                    });
+                });
+
+                //== Sweetalert Demo 3
+                $('#alert_demo_3_1').click(function(e) {
+                    swal("Good job!", "You clicked the button!", {
+                        icon : "warning",
+                        buttons: {                  
+                            confirm: {
+                                className : 'btn btn-warning'
+                            }
+                        },
+                    });
+                });
+
+                $('#alert_demo_3_2').click(function(e) {
+                    swal("Good job!", "You clicked the button!", {
+                        icon : "error",
+                        buttons: {                  
+                            confirm: {
+                                className : 'btn btn-danger'
+                            }
+                        },
+                    });
+                });
+
+                $('#alert_demo_3_3').click(function(e) {
+                    swal("Good job!", "You clicked the button!", {
+                        icon : "success",
+                        buttons: {                  
+                            confirm: {
+                                className : 'btn btn-success'
+                            }
+                        },
+                    });
+                });
+
+                $('#alert_demo_3_4').click(function(e) {
+                    swal("Good job!", "You clicked the button!", {
+                        icon : "info",
+                        buttons: {                  
+                            confirm: {
+                                className : 'btn btn-info'
+                            }
+                        },
+                    });
+                });
+
+                //== Sweetalert Demo 4
+                $('#alert_demo_4').click(function(e) {
+                    swal({
+                        title: "Good job!",
+                        text: "You clicked the button!",
+                        icon: "success",
+                        buttons: {
+                            confirm: {
+                                text: "Confirm Me",
+                                value: true,
+                                visible: true,
+                                className: "btn btn-success",
+                                closeModal: true
+                            }
+                        }
+                    });
+                });
+
+                $('#alert_demo_5').click(function(e){
+                    swal({
+                        title: 'Please enter your Shop name',
+                        html: '<br><input class="form-control" placeholder="Input Something" id="input-field">',
+                        content: {
+                            element: "input",
+                            attributes: {
+                                placeholder: "Input Something",
+                                type: "text",
+                                id: "input-field",
+                                className: "form-control"
+                            },
+                        },
+                        buttons: {
+                            cancel: {
+                                visible: true,
+                                className: 'btn btn-danger'
+                            },                  
+                            confirm: {
+                                className : 'btn btn-success'
+                            }
+                        },
+                    }).then(function(isConfirm) {
+                        if (isConfirm) {
+                            window.location = 'https://localhost:8000/accounts/shopify/login/?process=connect&shop=' + $('#input-field').val();
+                        }
+                    }
+                    );
+                });
+
+                $('#alert_demo_6').click(function(e) {
+                    swal("This modal will disappear soon!", {
+                        buttons: false,
+                        timer: 3000,
+                    });
+                });
+
+                $('#alert_demo_7').click(function(e) {
+                    var form = this;
+
+                    e.preventDefault();
+
+                    swal({
+                        title: 'Are you sure?',
+                        text: "You won't be able to revert this!",
+                        type: 'warning',
+                        buttons:{
+                            confirm: {
+                                text : 'Yes, delete it!',
+                                className : 'btn btn-success'
+                            },
+                            cancel: {
+                                visible: true,
+                                className: 'btn btn-danger'
+                            }
+                        }
+                    }).then(function(isConfirm) {
+                        if (isConfirm) {
+                            form.submit();
+                        }
+                    });
+                });
+
+                $('#alert_demo_8').click(function(e) {
+                    swal({
+                        title: 'Are you sure?',
+                        text: "You won't be able to revert this!",
+                        type: 'warning',
+                        buttons:{
+                            cancel: {
+                                visible: true,
+                                text : 'No, cancel!',
+                                className: 'btn btn-danger'
+                            },                  
+                            confirm: {
+                                text : 'Yes, delete it!',
+                                className : 'btn btn-success'
+                            }
+                        }
+                    }).then((willDelete) => {
+                        if (willDelete) {
+                            swal("Poof! Your imaginary file has been deleted!", {
+                                icon: "success",
+                                buttons : {
+                                    confirm : {
+                                        className: 'btn btn-success'
+                                    }
+                                }
+                            });
+                        } else {
+                            swal("Your imaginary file is safe!", {
+                                buttons : {
+                                    confirm : {
+                                        className: 'btn btn-success'
+                                    }
+                                }
+                            });
+                        }
+                    });
+                })
+
+            };
+
+            return {
+                //== Init
+                init: function() {
+                    initDemos();
+                },
+            };
+        }();
+
+        //== Class Initialization
+        jQuery(document).ready(function() {
+            SweetAlert2Demo.init();
+        });
+
+</script>
+
+{% endblock javascripts %}
